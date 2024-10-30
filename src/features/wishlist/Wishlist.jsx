@@ -2,7 +2,8 @@ import React, { useEffect } from 'react'
 import Header from '../../components/Header'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
-import { removeFromWishlist } from '../product/productSlice'
+import { removeFromWishlist, setCart } from '../product/productSlice'
+
 const Wishlist = () => {
   const dispatch = useDispatch()
   const productInfo  = useSelector((state) => state.products)
@@ -12,6 +13,13 @@ const Wishlist = () => {
     dispatch(removeFromWishlist(productId))
   }
 
+  const handleAddToCart = (product) => {
+    dispatch(setCart(product))
+    dispatch(removeFromWishlist(product._id))
+
+  }
+
+
   return (
     <div>
         <Header />
@@ -20,7 +28,7 @@ const Wishlist = () => {
             <div className="row ">
                 {
                     wishList.map((product) => (
-                        <div className="col mb-4" key={product._id}>
+                        <div className="col-4 mb-4" key={product._id}>
                             <Link className='text-decoration-none' to={`/products/product/${product._id}`} state={product}>
                             <div class="card" style={{ width: "18rem", border: "none" }}>
                                 <img src={product.imgUrl} class="card-img-top" alt={product.name} style={{ height: "18rem", objectFit: "cover" }} />

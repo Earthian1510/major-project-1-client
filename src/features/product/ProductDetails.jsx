@@ -1,11 +1,19 @@
 import React from 'react'
 import Header from '../../components/Header'
 import { useLocation } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { setCart } from './productSlice'
 
 const ProductDetails = () => {
 
+  const dispatch = useDispatch()
   const location = useLocation()
   const productInfo = location.state 
+
+  const handleAddToCart = (product) => {
+    dispatch(setCart(product))
+}
+
   
   return (
     <div>
@@ -16,7 +24,7 @@ const ProductDetails = () => {
                     <img src={productInfo.imgUrl} alt={productInfo.name} className='img-fluid' style={{  objectFit: "cover", height: "25rem",}} />
                     <div className='my-3'>
                         <button className='btn btn-success'>Buy Now</button>
-                        <button className='btn btn-warning mx-2'>Add to Cart</button>
+                        <button className='btn btn-warning mx-2' onClick={() => handleAddToCart(productInfo)}>Add to Cart</button>
                     </div>
                 </div>
                 <div className='col'>

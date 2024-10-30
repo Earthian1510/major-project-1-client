@@ -17,7 +17,7 @@ export const productSlice = createSlice({
         filterCategory: [],
         priceFilter: 'lowToHigh',
         wishlist: [],
-        cart: []
+        productCart: []
     },
 
     reducers: {
@@ -38,15 +38,28 @@ export const productSlice = createSlice({
             const productIdToRemove = action.payload
             state.wishlist = state.wishlist.filter(product => product._id !== productIdToRemove)
         },
-        setCart: (state, action) => {
+        setCart: (state, action) => { 
             const productToAdd = action.payload
-            const existingProduct = state.cart.find((item) => item._id === productToAdd._id)
+            const existingProduct = state.productCart.find(item => item._id === productToAdd._id)
 
-            if(existingProduct){
-                existingProduct.quantity += 1
+            if(!existingProduct){
+                state.productCart.push({...productToAdd, quantity: 1})
             }
-            else {
-                state.cart.push({...productToAdd, quantity: 1})
+        },
+        removeFromCart: (state, action) => {
+            const productIdToRemove = action.payload
+            state.productCart = state.productCart.filter(product => product._id !== productIdToRemove)
+        },
+        increaseQuantity: (state, action) => {
+            const product = state.productCart.find((item) => item._id === action.payload )
+            if(product){
+                product.quantity += 1;
+            }
+        },
+        decreaseQuantity: (state, action) => {
+            const product = state.productCart.find((item) => item._id === action.payload )
+            if(product && product.quantity > 1){
+                product.quantity -= 1;
             }
         }
     },
@@ -66,5 +79,5 @@ export const productSlice = createSlice({
     }
 })
 
-export const {setFilterCategory, setPriceFilter, setWishlist,removeFromWishlist, setCart} = productSlice.actions
+export const {setFilterCategory, setPriceFilter, setWishlist,removeFromWishlist, setCart, removeFromCart, increaseQuantity, decreaseQuantity} = productSlice.actions
 export default productSlice.reducer

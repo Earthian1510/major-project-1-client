@@ -9,8 +9,8 @@ const ProductsList = ({products}) => {
     const handleAddToCart = (product) => {
         dispatch(setCart(product))
     }
+    
     const handleAddToWishlist = (product) => {
-        console.log(product)
         dispatch(setWishlist(product))
     }
 
