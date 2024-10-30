@@ -21,7 +21,7 @@ const Header = () => {
             <span className="navbar-toggler-icon"></span>
           </button>
           <div className="collapse navbar-collapse flex-grow-1" id="navbarSupportedContent">
-            <form className="d-flex flex-grow-1" role="search">
+            <form className="d-flex flex-grow-1 my-2" role="search">
               <input
                 className="form-control me-2"
                 type="search"
@@ -40,13 +40,13 @@ const Header = () => {
                 </Link> 
                
               </li>
-              <li className="nav-item">
-                <Link className="nav-link" to="/link">
+              <li className="nav-item mx-2">
+                <Link className="nav-link" to="/products/cart">
                   Cart
                 </Link>
               </li>
-              <li className="nav-item">
-                <Link className="nav-link" to="/link">
+              <li className="nav-item mx-2">
+                <Link className="nav-link" to="/products/wishlist">
                   Wishlist
                 </Link>
               </li>
