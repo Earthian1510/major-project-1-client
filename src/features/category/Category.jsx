@@ -20,7 +20,7 @@ const Category = () => {
       {error && <p>Error: {error}</p>}
       {categories && (
         
-          <div className="row my-2">
+          <div className="row mt-2">
             {
               categories.map((category) => (
                 <div className="col mb-4" key={category._id}>
