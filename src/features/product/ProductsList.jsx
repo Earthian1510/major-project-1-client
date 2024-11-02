@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
-import { setCart, setWishlist } from './productSlice'
+import { useDispatch, useSelector } from 'react-redux'
+import { addToCart, addToWishlist } from './productSlice'
 
 const ProductsList = ({products}) => {
     const dispatch = useDispatch()
 
     const handleAddToCart = (product) => {
-        dispatch(setCart(product))
+       dispatch(addToCart(product._id))
     }
     
     const handleAddToWishlist = (product) => {
-        dispatch(setWishlist(product))
+        dispatch(addToWishlist(product._id))
     }
 
     return (

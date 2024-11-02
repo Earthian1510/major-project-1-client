@@ -2,7 +2,7 @@ import React from 'react'
 import Header from '../../components/Header'
 import { useLocation } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
-import { setCart } from './productSlice'
+import { addToCart } from './productSlice'
 
 const ProductDetails = () => {
 
@@ -11,7 +11,7 @@ const ProductDetails = () => {
   const productInfo = location.state 
 
   const handleAddToCart = (product) => {
-    dispatch(setCart(product))
+    dispatch(addToCart(product._id))
 }
 
   

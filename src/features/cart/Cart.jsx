@@ -1,21 +1,34 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Header from '../../components/Header';
-import { useSelector } from 'react-redux';
-import {setWishlist, removeFromCart, increaseQuantity, decreaseQuantity} from '../product/productSlice'
-import { useDispatch } from 'react-redux';
+import { useDispatch,useSelector } from 'react-redux';
+import UserAddress from '../user/UserAddress';
+import { removeFromCart, moveToWishlistFromCart, fetchCart, increaseCartQuantity, decreaseCartQuantity} from '../product/productSlice';
 
 const Cart = () => {
-  const cartProducts = useSelector((state) => state.products.productCart);
   
   const dispatch = useDispatch()
+  const cartProducts = useSelector((state) => state.products.productCart);
+  
+  useEffect(() => {
+    dispatch(fetchCart())
+  }, [dispatch])
+
+
   const handleRemoveFromCart = (productId) => {
     dispatch(removeFromCart(productId))
   }
 
   const handleMoveToWishlist = (product) => {
-    dispatch(setWishlist(product))
-    dispatch(removeFromCart(product._id))
+    dispatch(moveToWishlistFromCart(product._id))
   }
+
+  const handleIncreaseQuantity = (product) => {
+    dispatch(increaseCartQuantity(product));
+  };
+
+  const handleDecreaseQuantity = (product) => {
+    dispatch(decreaseCartQuantity(product));
+  };
 
   const totalProductPrice = cartProducts.reduce((acc, curr) => acc + curr.price * curr.quantity, 0)
   const deliveryCharge = 499
@@ -45,9 +58,9 @@ const Cart = () => {
                       <h2 className='fw-bold' style={{ fontFamily: "DM Serif Display, serif"}}>₹ {product.price}</h2>
                       <div>
                       Quantity:
-                        <button className='btn btn-sm btn-outline-secondary mx-1' onClick={() => dispatch(decreaseQuantity(product._id))}>-</button>
+                        <button className='btn btn-sm btn-outline-secondary mx-1' onClick={() => handleDecreaseQuantity(product)}>-</button>
                         <span className='fw-bold' style={{ fontFamily: "DM Serif Display, serif"}}>{product.quantity || 1}</span>
-                        <button className='btn btn-sm btn-outline-secondary mx-1' onClick={() => dispatch(increaseQuantity(product._id))}>+</button>
+                        <button className='btn btn-sm btn-outline-secondary mx-1' onClick={() => handleIncreaseQuantity(product)} >+</button>
                       </div>
                       <div className='d-flex mt-3'>
                         <button className='btn btn-sm btn-dark' onClick={() => handleRemoveFromCart(product._id)}>Remove</button>
@@ -88,10 +101,12 @@ const Cart = () => {
               </tbody>
 
             </table>
-            
+            <UserAddress />
             <button className='btn btn-primary'>Place Order</button>
           </div>
            }
+
+           
           </div>
         </div>
       </div>
