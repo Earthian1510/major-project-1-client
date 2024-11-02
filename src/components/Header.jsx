@@ -35,7 +35,7 @@ const Header = () => {
             <ul className="navbar-nav flex-grow-1 d-flex justify-content-end mb-2 mb-lg-0">
               <li className="nav-item mx-2">
                 
-                <Link className="nav-link active fw-semibold" aria-current="page" to="/">
+                <Link className="nav-link active fw-semibold" aria-current="page" to="/user">
                   Login
                 </Link> 
                
