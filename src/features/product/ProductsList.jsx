@@ -2,16 +2,30 @@ import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { addToCart, addToWishlist } from './productSlice'
+import { toast, ToastContainer } from "react-toastify";
 
 const ProductsList = ({products}) => {
     const dispatch = useDispatch()
 
     const handleAddToCart = (product) => {
        dispatch(addToCart(product._id))
+       .then(() => {
+        toast.success(`${product.name} added to cart!`); 
+      })
+      .catch(() => {
+        toast.error(`Failed to add ${product.name} to cart.`);
+      });
+       
     }
     
     const handleAddToWishlist = (product) => {
         dispatch(addToWishlist(product._id))
+        .then(() => {
+            toast.success(`${product.name} added to wishlist!`); 
+          })
+          .catch(() => {
+            toast.error(`Failed to add ${product.name} to wishlist.`);
+          });
     }
 
     return (
@@ -41,6 +55,7 @@ const ProductsList = ({products}) => {
                 }
 
             </div>
+            <ToastContainer />
         </div>
     )
 }

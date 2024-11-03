@@ -1,5 +1,6 @@
 import React from "react";
 import Header from "../../components/Header";
+import { Link } from "react-router-dom";
 
 const UserProfile = () => {
   return (
@@ -26,12 +27,29 @@ const UserProfile = () => {
               XYZ, 1209, Mumbai - 431222
             </p>
             <div>
-              <button className="btn btn-warning">Edit</button>
+              <Link className="btn btn-success" to='/user/addAddress'>Add Address</Link>
             </div>
           </div>
           <div className="col-md-6 my-3">
-              <h2 className="text-center">My Orders</h2>
-              <p></p>
+              <h2 className="text-center mb-3">My Orders</h2>
+              {/* <div className="card">
+                <div className="row">
+                  <div className="col">
+                <img src="https://plus.unsplash.com/premium_photo-1663088624029-5886b4fe8960?w=1400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8dGFpbG9yZWQlMjBwYW50fGVufDB8MHwwfHx8MA%3D%3D" alt="" className="img-fluid"/>
+                  </div>
+                  <div className="col p-3">
+                    <h5>
+                      Office#B
+                    </h5>
+                    <p>
+                      Price: ₹ 2999 <br />
+                      Quantity: 1 
+                    </p>
+                    <Link className="btn btn-primary" to='/user/invoice'>View Invoice</Link>
+                  </div>
+                </div>
+
+              </div> */}
             </div>
         </div>
       </div>

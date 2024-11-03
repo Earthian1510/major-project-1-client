@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { fetchAllProducts, setFilterCategory } from "./productSlice";
 import { fetchCategories } from "../category/categorySlice";
+import { toast, ToastContainer } from "react-toastify";
 
 const ProductView = () => {
   const dispatch = useDispatch();

@@ -3,6 +3,7 @@ import Header from '../../components/Header'
 import { useLocation } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { addToCart } from './productSlice'
+import { toast, ToastContainer } from "react-toastify";
 
 const ProductDetails = () => {
 
@@ -12,6 +13,12 @@ const ProductDetails = () => {
 
   const handleAddToCart = (product) => {
     dispatch(addToCart(product._id))
+    .then(() => {
+        toast.success(`${product.name} added to cart!`); 
+      })
+      .catch(() => {
+        toast.error(`Failed to add ${product.name} to cart.`);
+      });
 }
 
   
@@ -38,6 +45,7 @@ const ProductDetails = () => {
                 </div>
             </div>
         </div>
+        <ToastContainer />
     </div>
   )
 }

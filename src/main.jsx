@@ -9,6 +9,8 @@ import ProductDetails from './features/product/ProductDetails.jsx'
 import Wishlist from './features/wishlist/Wishlist.jsx'
 import Cart from './features/cart/Cart.jsx'
 import UserProfile from './features/user/UserProfile.jsx'
+import UserInvoice from './features/user/userInvoice.jsx'
+import UserAddressForm from './features/user/UserAddressForm.jsx'
 
 const router = createBrowserRouter([
   {
@@ -18,6 +20,14 @@ const router = createBrowserRouter([
   {
     path: '/user',
     element: <UserProfile />
+  },
+  {
+    path: '/user/addAddress',
+    element: <UserAddressForm />
+  },
+  {
+    path: '/user/invoice',
+    element: <UserInvoice />
   },
   {
     path: '/products',
