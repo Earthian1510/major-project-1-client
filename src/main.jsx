@@ -34,6 +34,10 @@ const router = createBrowserRouter([
     element: <ProductsView />
   },
   {
+    path: '/products/:category',
+    element: <ProductsView />
+  },
+  {
     path: '/products/wishlist',
     element: <Wishlist />
   },
