@@ -37,11 +37,11 @@ const ProductDetails = () => {
         <Header />
         <div className='container my-3'>
             <div className="row">
-                <div className="col-6">
+                <div className="col-md-6 mb-4" >
                     <img src={productInfo.imgUrl} alt={productInfo.name} className='img-fluid' style={{  objectFit: "cover", height: "25rem",}} />
                     
                 </div>
-                <div className='col'>
+                <div className='col-md-6'>
                     <h1 className='fw-light'>{productInfo.name}</h1>
                     <h2 className='fw-bold'>₹ {productInfo.price}</h2>
                     <hr />
