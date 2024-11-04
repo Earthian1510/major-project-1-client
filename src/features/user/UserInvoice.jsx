@@ -14,11 +14,11 @@ const UserInvoice = () => {
       <Header />
       <div className="container">
         <div className="row my-4">
-          <div className="col">
+          <div className="col-md-6">
             <div className="card p-4">
               <h5 className="text-center" style={{ fontFamily: "DM Serif Display, serif"}}>Invoice</h5>
               <hr />
-              <p>
+              <p style={{fontSize: '12px'}}>
                 To, <br />
                 <b>{address?.name}</b> <br />
                 {address?.address} <br />
@@ -29,9 +29,9 @@ const UserInvoice = () => {
                 <table class="table" style={{fontSize: '12px'}}>
                   <thead>
                     <tr>
-                      <th scope="col">Sr No</th>
-                      <th scope="col">Product Name</th>
-                      <th scope="col">Product Rate</th>
+                      <th scope="col">#</th>
+                      <th scope="col">Name</th>
+                      <th scope="col">Rate</th>
                       <th scope="col">Quantity</th>
                       <th scope="col">Price</th>
                     </tr>
