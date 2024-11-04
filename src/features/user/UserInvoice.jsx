@@ -14,7 +14,7 @@ const UserInvoice = () => {
       <Header />
       <div className="container">
         <div className="row my-4">
-          <div className="col-md-6">
+          <div className="col">
             <div className="card p-4">
               <h5 className="text-center" style={{ fontFamily: "DM Serif Display, serif"}}>Invoice</h5>
               <hr />
@@ -26,7 +26,7 @@ const UserInvoice = () => {
               </p>
 
               <div className="my-3">
-                <table class="table">
+                <table class="table" style={{fontSize: '12px'}}>
                   <thead>
                     <tr>
                       <th scope="col">Sr No</th>
@@ -63,7 +63,7 @@ const UserInvoice = () => {
               </div>
             </div>
           </div>
-          <div className="col"></div>
+          
         </div>
       </div>
     </div>

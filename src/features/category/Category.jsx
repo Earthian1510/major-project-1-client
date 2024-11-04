@@ -23,11 +23,11 @@ const Category = () => {
           <div className="row mt-2">
             {
               categories.map((category) => (
-                <div className="col mb-4" key={category._id}>
+                <div className="col-md-3 mb-4" key={category._id}>
                   <Link to={`/products/${category.name}`}>
                     <div
                       className="card"
-                      style={{ width: "18rem", border: "none" }}
+                      style={{ width: "20rem", border: "none" }}
                     >
                       <img
                         className="card-img-top"

@@ -50,27 +50,6 @@ const FilterBar = ({ categories, filterCategory, priceFilter }) => {
                 }
             </div>
 
-            <div className="mb-4">
-                <h6 className="fw-bold">Rating</h6>
-                <input
-                    className="mx-2"
-                    type="range"
-                    class="form-range"
-                    min="0"
-                    max="5"
-                    step="1"
-                    id="customRange3"
-                />
-                <div className="d-flex justify-content-between">
-                    <span>0</span>
-                    <span>1</span>
-                    <span>2</span>
-                    <span>3</span>
-                    <span>4</span>
-                    <span>5</span>
-                </div>
-            </div>
-
             <div className="mb-3">
             <h6 className="fw-bold">Sort by</h6>
                 <input className="mx-2"

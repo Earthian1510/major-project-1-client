@@ -36,7 +36,7 @@ const Header = () => {
               <li className="nav-item mx-2">
                 
                 <Link className="nav-link active fw-semibold" aria-current="page" to="/user">
-                  Login
+                  User
                 </Link> 
                
               </li>

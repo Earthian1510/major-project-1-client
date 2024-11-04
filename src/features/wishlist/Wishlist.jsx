@@ -49,7 +49,7 @@ const Wishlist = () => {
                     wishlist.map((product) => (
                         <div className="col-md-3 mb-4 px-4" key={product._id}>
                             <Link className='text-decoration-none' to={`/products/product/${product._id}`} state={product}>
-                            <div class="card" style={{ width: "18rem", border: "none" }}>
+                            <div class="card" style={{ width: "20rem", border: "none" }}>
                                 <img src={product.imgUrl} class="card-img-top" alt={product.name} style={{ height: "18rem", objectFit: "cover" }} />
                                 <div class="card-body text-center">
                                     <p class="card-text">
@@ -60,9 +60,11 @@ const Wishlist = () => {
                             </div>
                             </Link>
                             
-                             <button className='btn btn-success' onClick={() => handleAddToCart(product)}>Cart</button>
+                            <div className='text-center'>
+                            <button className='btn btn-success' onClick={() => handleAddToCart(product)}>Cart</button>
                              <button className='btn btn-danger mx-1' onClick={() => handleRemoveFromWishlist(product._id)}>Remove</button>
                             
+                            </div>
                          </div>
                      ))
                 }

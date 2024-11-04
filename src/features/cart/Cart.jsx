@@ -68,7 +68,7 @@ const Cart = () => {
       <div className='container my-3'>
         <h2 className='fw-light mb-3'>My Cart ({cartProducts.length ? cartProducts.length : '0'})</h2>
         <div className="row">
-          <div className="col">
+          <div className="col-md-6 mb-4">
             {cartProducts.length > 0 ? (
               cartProducts.map((product) => (
                 <div key={product._id} className="col mb-4">
@@ -104,7 +104,7 @@ const Cart = () => {
               <p>Your cart is empty.</p>
             )}
           </div>
-          <div className="col">
+          <div className="col-md-6">
             {
               cartProducts.length > 0
               &&

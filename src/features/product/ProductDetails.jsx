@@ -2,7 +2,7 @@ import React from 'react'
 import Header from '../../components/Header'
 import { useLocation } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
-import { addToCart } from './productSlice'
+import { addToCart, addToWishlist } from './productSlice'
 import { toast, ToastContainer } from "react-toastify";
 
 const ProductDetails = () => {
@@ -19,7 +19,17 @@ const ProductDetails = () => {
       .catch(() => {
         toast.error(`Failed to add ${product.name} to cart.`);
       });
-}
+  }
+
+  const handleAddToWishlist = (product) => {
+    dispatch(addToWishlist(product._id))
+    .then(() => {
+        toast.success(`${product.name} added to wishlist!`); 
+      })
+      .catch(() => {
+        toast.error(`Failed to add ${product.name} to wishlist.`);
+      });
+  }
 
   
   return (
@@ -29,10 +39,7 @@ const ProductDetails = () => {
             <div className="row">
                 <div className="col-6">
                     <img src={productInfo.imgUrl} alt={productInfo.name} className='img-fluid' style={{  objectFit: "cover", height: "25rem",}} />
-                    <div className='my-3'>
-                        <button className='btn btn-success'>Buy Now</button>
-                        <button className='btn btn-warning mx-2' onClick={() => handleAddToCart(productInfo)}>Add to Cart</button>
-                    </div>
+                    
                 </div>
                 <div className='col'>
                     <h1 className='fw-light'>{productInfo.name}</h1>
@@ -42,6 +49,10 @@ const ProductDetails = () => {
                         <b>Description:</b> <br />
                         {productInfo.description}
                     </p>
+                    <div className='my-3'>
+                        <button className='btn btn-success mx-2' onClick={() => handleAddToCart(productInfo)}>Add to Cart</button>
+                        <button className='btn btn-warning' onClick={() => handleAddToWishlist(productInfo)}>Wishlist</button>
+                    </div>
                 </div>
             </div>
         </div>
