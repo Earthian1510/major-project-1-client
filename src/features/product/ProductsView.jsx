@@ -12,7 +12,7 @@ const ProductView = () => {
   const dispatch = useDispatch();
   const { category } = useParams();
 
-  const { products, status, error, filterCategory, priceFilter } = useSelector(
+  const { products, status, error, filterCategory, priceFilter, searchedProduct } = useSelector(
     (state) => state.products
   );
   const categories = useSelector((state) => state.categories.categories);
@@ -25,16 +25,22 @@ const ProductView = () => {
     }
   }, [dispatch, category]);
 
-  let filteredProducts = filterCategory.length
-    ? products.filter((product) => filterCategory.includes(product.category))
-    : products;
 
-  const sortedProducts = [...filteredProducts];
+  let filteredProducts = [...products] 
 
-  if (priceFilter === "lowToHigh") {
-    sortedProducts.sort((a, b) => a.price - b.price);
-  } else if (priceFilter === "highToLow") {
-    sortedProducts.sort((a, b) => b.price - a.price);
+  if(filterCategory.length) {
+    filteredProducts = filteredProducts.filter((product) => filterCategory.includes(product.category))
+  }
+
+  if(searchedProduct) {
+    filteredProducts = filteredProducts.filter((product) => product.name.toLowerCase().includes(searchedProduct.toLowerCase()))
+  }
+
+  if(priceFilter === 'lowToHigh') {
+    filteredProducts.sort((a,b) => a.price - b.price)
+  }
+  else if(priceFilter === 'highToLow') {
+    filteredProducts.sort((a,b) => b.price - a.price)
   }
 
   return (
@@ -53,7 +59,7 @@ const ProductView = () => {
           {error && <p>Error: {error}</p>}
           {status === "success" && (
             <div className="col mt-3 bg-light">
-              <ProductsList products={sortedProducts} />
+              <ProductsList products={filteredProducts} />
             </div>
           )}
         </div>

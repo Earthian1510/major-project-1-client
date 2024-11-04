@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
+
 const productBaseUrl = 'https://major-project-1-backend-pink.vercel.app/api/products'
 
 export const fetchAllProducts = createAsyncThunk('products/fetchAllProducts', async() => {
@@ -68,7 +69,8 @@ export const productSlice = createSlice({
         filterCategory: [],
         priceFilter: 'lowToHigh',
         wishlist: [],
-        productCart: []
+        productCart: [],
+        searchedProduct: ''
     },
 
     reducers: {
@@ -77,6 +79,9 @@ export const productSlice = createSlice({
         },
         setPriceFilter: (state, action) => {
             state.priceFilter = action.payload
+        },
+        setSearchedProduct: (state, action) => {
+            state.searchedProduct = action.payload
         }
     },
     extraReducers: (builder) => {
@@ -181,5 +186,5 @@ export const productSlice = createSlice({
     }
 })
 
-export const {setFilterCategory, setPriceFilter } = productSlice.actions
+export const {setFilterCategory, setPriceFilter, setSearchedProduct } = productSlice.actions
 export default productSlice.reducer

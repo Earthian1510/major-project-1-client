@@ -1,7 +1,22 @@
-import React from "react";
-import { NavLink, Link } from "react-router-dom";
+import React, { useState } from "react";
+import { NavLink, Link , useNavigate} from "react-router-dom";
+import { setSearchedProduct } from "../features/product/productSlice";
+import { useDispatch } from "react-redux";
 
 const Header = () => {
+
+  const [search, setSearch] = useState('')
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault()
+    dispatch(setSearchedProduct(search))
+    setSearch('')
+    navigate('/products')
+    
+  }
+
   return (
     <div>
       <nav className="navbar navbar-expand-lg bg-body-tertiary">
@@ -27,8 +42,10 @@ const Header = () => {
                 type="search"
                 placeholder="Search"
                 aria-label="Search"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
               />
-              <button className="btn btn-outline-success" type="submit">
+              <button className="btn btn-outline-success" type="submit" onClick={handleSearchSubmit}>
                 Search
               </button>
             </form>
