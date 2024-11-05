@@ -7,7 +7,6 @@ import { useParams } from "react-router-dom";
 import { fetchAllProducts, setFilterCategory, setSearchedProduct } from "./productSlice";
 import { fetchCategories } from "../category/categorySlice";
 
-
 const ProductView = () => {
   const dispatch = useDispatch();
   const { category } = useParams();
@@ -25,27 +24,29 @@ const ProductView = () => {
     }
   }, [dispatch, category]);
 
+
   useEffect(() => {
-    if(filterCategory.length > 0) {
-      dispatch(setSearchedProduct(''))
+    if (searchedProduct) {
+      dispatch(setFilterCategory([])); 
     }
-  })
+  }, [searchedProduct, dispatch]);
 
-  let filteredProducts = [...products] 
+  let filteredProducts = [...products];
 
-  if(filterCategory.length) {
-    filteredProducts = filteredProducts.filter((product) => filterCategory.includes(product.category))
+  if (filterCategory.length) {
+    filteredProducts = filteredProducts.filter((product) => filterCategory.includes(product.category));
   }
 
-  if(searchedProduct) {
-    filteredProducts = filteredProducts.filter((product) => product.name.toLowerCase().includes(searchedProduct.toLowerCase()))
+  if (searchedProduct) {
+    filteredProducts = filteredProducts.filter((product) => 
+      product.name.toLowerCase().includes(searchedProduct.toLowerCase())
+    );
   }
 
-  if(priceFilter === 'lowToHigh') {
-    filteredProducts.sort((a,b) => a.price - b.price)
-  }
-  else if(priceFilter === 'highToLow') {
-    filteredProducts.sort((a,b) => b.price - a.price)
+  if (priceFilter === 'lowToHigh') {
+    filteredProducts.sort((a, b) => a.price - b.price);
+  } else if (priceFilter === 'highToLow') {
+    filteredProducts.sort((a, b) => b.price - a.price);
   }
 
   return (
