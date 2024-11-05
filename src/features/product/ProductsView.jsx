@@ -4,9 +4,9 @@ import FilterBar from "./FilterBar";
 import ProductsList from "./ProductsList";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { fetchAllProducts, setFilterCategory } from "./productSlice";
+import { fetchAllProducts, setFilterCategory, setSearchedProduct } from "./productSlice";
 import { fetchCategories } from "../category/categorySlice";
-import { toast, ToastContainer } from "react-toastify";
+
 
 const ProductView = () => {
   const dispatch = useDispatch();
@@ -25,6 +25,11 @@ const ProductView = () => {
     }
   }, [dispatch, category]);
 
+  useEffect(() => {
+    if(filterCategory.length > 0) {
+      dispatch(setSearchedProduct(''))
+    }
+  })
 
   let filteredProducts = [...products] 
 
