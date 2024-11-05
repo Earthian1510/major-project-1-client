@@ -1,8 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const productBaseUrl = import.meta.env.PRODUCT_BASE_URL
-console.log(productBaseUrl)
+const productBaseUrl = 'https://major-project-1-backend-pink.vercel.app/api/products'
 
 export const fetchAllProducts = createAsyncThunk('products/fetchAllProducts', async() => {
     const response = await axios.get(productBaseUrl)
