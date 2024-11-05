@@ -14,6 +14,7 @@ const UserAddressForm = () => {
   }, [dispatch]);
 
   const [addressData, setAddressData] = useState({
+    _id: '',
     name: '',
     address: '',
     phoneNo: ''
@@ -56,19 +57,19 @@ const UserAddressForm = () => {
         dispatch(updateAddress(addressData))
           .then(() => {
             toast.success("Address updated successfully!");
-            setAddressData({ name: '', address: '', phoneNo: '' }); // Reset form
+            setAddressData({  _id: '', name: '', address: '', phoneNo: '' }); 
           })
           .catch(() => toast.error("Failed to update address"));
       } else {
         dispatch(addAddress({ name, address, phoneNo }))
           .then(() => {
             toast.success("Address added successfully!");
-            setAddressData({ name: '', address: '', phoneNo: '' }); // Reset form
+            setAddressData({ _id: '', name: '', address: '', phoneNo: '' }); 
           })
           .catch(() => toast.error("Failed to add address"));
       }
     } else {
-      toast.error("Please fill in all fields."); // Notify if fields are empty
+      toast.error("Please fill in all fields."); 
     }
   };
 
@@ -78,7 +79,7 @@ const UserAddressForm = () => {
       <div className="container">
         <div className="row my-3">
           <div className="col-md-6 mb-4">
-            <h2>Add Address</h2>
+            <h2>{addressData._id ? 'Edit' : 'Add'} Address</h2>
             <form onSubmit={handleFormSubmit}>
               <div>
                 <input
@@ -113,8 +114,8 @@ const UserAddressForm = () => {
                 />
               </div>
               <br />
-              <button type="submit" className="btn btn-primary">
-                Add
+              <button type="submit" className={`btn ${addressData._id ? 'btn-warning': 'btn-primary'}`}>
+              {addressData._id ? 'Edit' : 'Add'} 
               </button>
             </form>
           </div>
