@@ -1,5 +1,5 @@
 
-const BASE_URL = 'http://localhost:3000';
+const BASE_URL = 'https://major-project-1-backend-pink.vercel.app';
 
 export const API = {
     baseUrl : BASE_URL,
