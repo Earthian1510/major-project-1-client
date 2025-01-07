@@ -1,15 +1,19 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { productSlice } from "./features/product/productSlice";
-import { categorySlice } from "./features/category/categorySlice";
-import { addressSlice } from "./features/user/addressSlice";
-
+import productReducer from "./features/store/productSlice";
+import categoryReducer from "./features/store/categorySlice";
+import filterReducer from './features/store/filterSlice';
+import authReducer from './features/store/authSlice'
+import userReducer from './features/store/userSlice'
+import cartReducer from './features/store/cartSlice'
 const store = configureStore({
     reducer: {
-        products: productSlice.reducer,
-        categories: categorySlice.reducer,
-        address: addressSlice.reducer
+        product: productReducer,
+        categories: categoryReducer,
+        filters: filterReducer,
+        auth: authReducer,
+        users: userReducer,
+        cart: cartReducer
     },
 });
-
 
 export default store;

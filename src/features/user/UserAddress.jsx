@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import { fetchAddress } from "./addressSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 const UserAddress = ({setSelectedAddress}) => {

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Header from "../../components/Header";
 import { useDispatch, useSelector } from "react-redux";
-import { addAddress, fetchAddress, deleteAddress, updateAddress } from './addressSlice';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 

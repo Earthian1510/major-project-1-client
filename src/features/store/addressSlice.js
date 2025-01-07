@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const baseUrl = 'https://major-project-1-backend-pink.vercel.app/api/user/address'
+const baseUrl = 'http://127.0.0.1:3000/user'
 
 export const fetchAddress = createAsyncThunk('address/fetchAddress', async () => {
     const response = await axios.get(baseUrl)

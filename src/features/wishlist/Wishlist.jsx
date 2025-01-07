@@ -2,7 +2,6 @@ import React, { useEffect } from 'react'
 import Header from '../../components/Header'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
-import { fetchWishlist, addToCart, removeFromWishlist } from '../product/productSlice'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 

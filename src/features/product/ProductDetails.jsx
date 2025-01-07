@@ -1,62 +1,86 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Header from '../../components/Header'
-import { useLocation } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
-import { addToCart, addToWishlist } from './productSlice'
-import { toast, ToastContainer } from "react-toastify";
+import { useLocation, Link } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import { fetchProducts } from '../store/productSlice'
 
 const ProductDetails = () => {
 
   const dispatch = useDispatch()
+  const { products } = useSelector((state) => state.product)
+
+  useEffect(() => {
+    dispatch(fetchProducts())
+  }, [dispatch])
+
   const location = useLocation()
-  const productInfo = location.state 
+  const productInfo = location.state
 
-  const handleAddToCart = (product) => {
-    dispatch(addToCart(product._id))
-    .then(() => {
-        toast.success(`${product.name} added to cart!`); 
-      })
-      .catch(() => {
-        toast.error(`Failed to add ${product.name} to cart.`);
-      });
-  }
+  const productArr = products?.filter((prod) => {
+    return prod._id !== productInfo._id && prod.category === productInfo.category;
+  })
 
-  const handleAddToWishlist = (product) => {
-    dispatch(addToWishlist(product._id))
-    .then(() => {
-        toast.success(`${product.name} added to wishlist!`); 
-      })
-      .catch(() => {
-        toast.error(`Failed to add ${product.name} to wishlist.`);
-      });
-  }
+  console.log(productArr)
 
-  
   return (
     <div>
-        <Header />
-        <div className='container my-3'>
-            <div className="row">
-                <div className="col-md-6 mb-4" >
-                    <img src={productInfo.imgUrl} alt={productInfo.name} className='img-fluid' style={{  objectFit: "cover", height: "25rem",}} />
-                    
-                </div>
-                <div className='col-md-6'>
-                    <h1 className='fw-light'>{productInfo.name}</h1>
-                    <h2 className='fw-bold'>₹ {productInfo.price}</h2>
-                    <hr />
-                    <p>
-                        <b>Description:</b> <br />
-                        {productInfo.description}
-                    </p>
-                    <div className='my-3'>
-                        <button className='btn btn-success mx-2' onClick={() => handleAddToCart(productInfo)}>Add to Cart</button>
-                        <button className='btn btn-warning' onClick={() => handleAddToWishlist(productInfo)}>Wishlist</button>
-                    </div>
-                </div>
+      <Header />
+      <div className='container my-3'>
+        <div className="row">
+          <div className="col-md-6 mb-4" >
+            <img src={productInfo.imageUrl} alt={productInfo.name} className='img-fluid' style={{ objectFit: "cover", height: "25rem", }} />
+
+          </div>
+          <div className='col-md-6'>
+            <h1 className='fw-light'>{productInfo.name}</h1>
+            <h2 className='fw-bold'>₹ {productInfo.price}</h2>
+            <hr />
+            <h4>Stock: {productInfo.stock}</h4>
+            <p>
+              <b>Description:</b> <br />
+              {productInfo.description}
+            </p>
+            <div className='my-3'>
+              <button className='btn btn-success mx-2' onClick=''>Add to Cart</button>
+              <button className='btn btn-warning' onClick=''>Buy Now</button>
             </div>
+          </div>
         </div>
-        <ToastContainer />
+        <hr />
+        <div className="row">
+          { productArr.length > 0 ? <h3 className='mb-3'>You may like</h3>: <h3></h3>}
+          {
+
+            productArr && productArr.length > 0 ? (
+              productArr.map((product) => (
+
+                <div className="col-md-4 mb-4" key={product._id}>
+                  <Link className='text-decoration-none' to={`/products/product/${product._id}`} state={product}>
+                    <div className="card mb-2" style={{ width: "19rem", border: "none" }}>
+                      <img src={product.imageUrl} className="card-img-top" alt={product.name} style={{ height: "18rem", objectFit: "cover" }} />
+                      <div className="card-body text-center">
+                        <p className="card-text">
+                          {product.name} <br />
+                          <span className='fs-5 fw-bold'>₹ {product.price}</span>
+                        </p>
+                      </div>
+                    </div>
+                  </Link>
+
+                  <div className='text-center' style={{maxWidth: '308px'}}>
+                    <div>
+                    <button className='btn btn-success'>Cart</button>
+                    <button className='btn btn-dark mx-1'>Wishlist</button>
+                    </div>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div></div>
+            )
+          }
+        </div>
+      </div>
     </div>
   )
 }

@@ -12,6 +12,12 @@ import UserProfile from './features/user/UserProfile.jsx'
 import UserInvoice from './features/user/UserInvoice.jsx'
 import UserAddressForm from './features/user/UserAddressForm.jsx'
 
+import ProductForm from './forms/ProductForm.jsx'
+import LoginPage from './pages/LoginPage.jsx'
+import SignupPage from './pages/SignupPage.jsx'
+
+import ProtectedRoute from './components/ProtectedRoute.jsx'
+
 const router = createBrowserRouter([
   {
     path: '/',
@@ -19,7 +25,7 @@ const router = createBrowserRouter([
   },
   {
     path: '/user',
-    element: <UserProfile />
+    element: (<ProtectedRoute element={<UserProfile />} />)
   },
   {
     path: '/user/addAddress',
@@ -27,6 +33,18 @@ const router = createBrowserRouter([
   },
   {
     path: '/user/invoice',
+    element: <UserInvoice />
+  },
+  {
+    path: '/cart',
+    element: <Cart />
+  },
+  {
+    path: '/wishlist',
+    element: <Wishlist />
+  },
+  {
+    path: '/orders',
     element: <UserInvoice />
   },
   {
@@ -38,22 +56,21 @@ const router = createBrowserRouter([
     element: <ProductsView />
   },
   {
-    path: '/products/wishlist',
-    element: <Wishlist />
-  },
-  {
-    path: '/products/cart',
-    element: <Cart />
-  },
-  {
-    path: '/products/:category',
-    element: <ProductsView />
-  },
-  {
     path: '/products/product/:productId',
     element: <ProductDetails />
   },
-
+  {
+    path: '/forms/addProduct',
+    element: <ProductForm/>
+  },
+  {
+    path: '/login',
+    element: <LoginPage/>
+  },
+  {
+    path: '/signup',
+    element: <SignupPage/>
+  }
 ])
 
 createRoot(document.getElementById('root')).render(

@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchCategories } from "./categorySlice";
+import { fetchCategories } from "../store/categorySlice";
 
 const Category = () => {
   const dispatch = useDispatch();
-  const { categories, status, error } = useSelector(
+  const { categories, loading, error } = useSelector(
     (state) => state.categories
   );
 
@@ -16,13 +16,13 @@ const Category = () => {
   return (
     <>
     <div className="container">
-      {status === "loading" && <p>Loading...</p>}
+      {loading && <p>Loading...</p>}
       {error && <p>Error: {error}</p>}
       {categories && (
         
           <div className="row mt-2">
             {
-              categories.map((category) => (
+              categories.slice(-4).map((category) => (
                 <div className="col-md-3 mb-4" key={category._id}>
                   <Link to={`/products/${category.name}`}>
                     <div
@@ -31,7 +31,7 @@ const Category = () => {
                     >
                       <img
                         className="card-img-top"
-                        src={category.imgUrl}
+                        src={category.imageUrl}
                         alt="Card image cap"
                         style={{ height: "12rem" }}
                       />

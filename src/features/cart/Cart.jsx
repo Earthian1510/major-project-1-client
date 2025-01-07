@@ -1,66 +1,65 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import Header from '../../components/Header';
 import { useDispatch, useSelector } from 'react-redux';
-import UserAddress from '../user/UserAddress';
-import { removeFromCart, moveToWishlistFromCart, fetchCart, increaseCartQuantity, decreaseCartQuantity } from '../product/productSlice';
 import { useNavigate } from 'react-router-dom';
-import { toast, ToastContainer } from "react-toastify";
-
+import { fetchCart, updateProductQuantity, removeCartItem } from '../store/cartSlice'; // import actions
 
 const Cart = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  
+  const cartProducts = useSelector((state) => state.cart.cart?.items || []);
+  const loggedInUser = useSelector((state) => state.users.currentUserInfo);
+  
+  if(!loggedInUser){
+    return <div>Loading ...</div>
+  }
+  
+  const userId = loggedInUser._id;
 
-  const dispatch = useDispatch()
-  const navigate = useNavigate()
-  const cartProducts = useSelector((state) => state.products.productCart);
+  const totalProductPrice = cartProducts.reduce((acc, item) => acc + (item.productId.price * item.quantity), 0);
+  const deliveryCharge = 50; 
 
   useEffect(() => {
-    dispatch(fetchCart())
-    
-  }, [dispatch])
+    if (userId) {
+      dispatch(fetchCart(userId)); 
+    }
+  }, [dispatch, userId]); 
 
-  const [selectedAddress, setSelectedAddress] = useState()
-
-  const handleRemoveFromCart = (productId) => {
-    dispatch(removeFromCart(productId))
-    .then(() => {
-      toast.success(`Product removed from cart!`); 
-    })
-    .catch(() => {
-      toast.error(`Failed to remove product from cart.`);
-    });
-  }
-
-  const handleMoveToWishlist = (product) => {
-    dispatch(moveToWishlistFromCart(product._id))
-    .then(() => {
-      toast.success(`${product.name} moved to wishlist!`); 
-    })
-    .catch(() => {
-      toast.error(`Failed to move ${product.name} to wishlist.`);
-    });
-  }
-
-  const handleIncreaseQuantity = (product) => {
-    dispatch(increaseCartQuantity(product));
+  const handleIncreaseQuantity = (item) => {
+    dispatch(updateProductQuantity({
+      userId,
+      productId: item.productId._id,
+      action: 'increase',
+    }));
+   
   };
 
-  const handleDecreaseQuantity = (product) => {
-    dispatch(decreaseCartQuantity(product));
-  };
-
-  const totalProductPrice = cartProducts.reduce((acc, curr) => acc + curr.price * curr.quantity, 0)
-  const deliveryCharge = 499
-
-
-  const handlePlaceOrder = () => {
-    if(selectedAddress) {
-      navigate('/user/invoice', { state: { address: selectedAddress, cart: cartProducts}})
+  const handleDecreaseQuantity = (item) => {
+    if (item.quantity > 1) {
+      dispatch(updateProductQuantity({
+        userId,
+        productId: item.productId._id,
+        action: 'decrease',
+      }));
+      
     }
     else{
-      alert("Please select an address before placing an order")
+      dispatch(removeCartItem({userId, productId: item.productId._id}))
+      
     }
-  
+  };
+
+  const handleRemoveFromCart = (productId) => {
+    dispatch(removeCartItem({ userId, productId}))
+    
+
   }
+
+  const handlePlaceOrder = () => {
+    alert('Order placed successfully!');
+    navigate('/checkout');
+  };
 
   return (
     <>
@@ -70,30 +69,37 @@ const Cart = () => {
         <div className="row">
           <div className="col-md-6 mb-4">
             {cartProducts.length > 0 ? (
-              cartProducts.map((product) => (
-                <div key={product._id} className="col mb-4">
+              cartProducts.map((item) => (
+                <div key={item.productId._id} className="col mb-4">
                   <div className="card">
                     <div className="row">
-                      <div className="col-6" style={{ height: '12rem' }}>
+                      <div className="col-6" style={{ height: '14rem' }}>
                         <img
                           className='img-fluid'
-                          style={{ height: '12rem', width: '15rem', objectFit: 'cover' }}
-                          src={product.imgUrl}
-                          alt={product.name}
+                          style={{ height: '14rem', width: '15rem', objectFit: 'cover' }}
+                          src={item.productId.imageUrl}
+                          alt={item.productId.name}
                         />
                       </div>
                       <div className="col pt-3">
-                        <h4>{product.name}</h4>
-                        <h2 className='fw-bold' style={{ fontFamily: "DM Serif Display, serif" }}>₹ {product.price}</h2>
+                        <h5>{item.productId.name}</h5>
+                        <h2 className='fw-bold' style={{ fontFamily: "DM Serif Display, serif" }}>
+                          ₹ {item.productId.price}
+                        </h2>
                         <div>
                           Quantity:
-                          <button className='btn btn-sm btn-outline-secondary mx-1' onClick={() => handleDecreaseQuantity(product)}>-</button>
-                          <span className='fw-bold' style={{ fontFamily: "DM Serif Display, serif" }}>{product.quantity || 1}</span>
-                          <button className='btn btn-sm btn-outline-secondary mx-1' onClick={() => handleIncreaseQuantity(product)} >+</button>
+                          <button className='btn btn-sm btn-outline-secondary mx-1' onClick={() => handleDecreaseQuantity(item)}>-</button>
+                          <span className='fw-bold' style={{ fontFamily: "DM Serif Display, serif" }}>{item.quantity || 1}</span>
+                          <button className='btn btn-sm btn-outline-secondary mx-1' onClick={() => handleIncreaseQuantity(item)} >+</button>
                         </div>
                         <div className='d-flex mt-3'>
-                          <button className='btn btn-sm btn-dark' onClick={() => handleRemoveFromCart(product._id)}>Remove</button>
-                          <button className='btn btn-sm btn-warning mx-1' onClick={() => handleMoveToWishlist(product)}>Wishlist</button>
+                          <button 
+                            className='btn btn-sm btn-dark' 
+                            onClick={() => handleRemoveFromCart(item.productId._id)}
+                          >
+                            Remove
+                          </button>
+                          <button className='btn btn-sm btn-warning mx-1' onClick={() => handleMoveToWishlist(item)}>Wishlist</button>
                         </div>
                       </div>
                     </div>
@@ -105,39 +111,31 @@ const Cart = () => {
             )}
           </div>
           <div className="col-md-6">
-            {
-              cartProducts.length > 0
-              &&
+            {cartProducts.length > 0 && (
               <div className="card p-3">
                 <h5>Price Details</h5>
-
                 <table className='table table-borderless' style={{ borderTop: '1px solid gray' }}>
-
                   <tbody>
                     <tr style={{ borderBottom: '1px solid' }}>
                       <td>Price ({cartProducts.length} items)</td>
                       <td>₹ {totalProductPrice}</td>
                     </tr>
-
                     <tr className='py-0'>
                       <td>Delivery Charges</td>
                       <td>₹ {deliveryCharge}</td>
                     </tr>
-
                     <tr className='fw-bold' style={{ borderBlock: '1px solid gray' }}>
                       <td>Total Amount</td>
                       <td>₹ {totalProductPrice + deliveryCharge}</td>
                     </tr>
                   </tbody>
-
                 </table>
-                <UserAddress setSelectedAddress={setSelectedAddress}/>
+                
                 <button className='btn btn-primary' onClick={handlePlaceOrder}>Place Order</button>
               </div>
-            }
+            )}
           </div>
         </div>
-        <ToastContainer />
       </div>
     </>
   );
