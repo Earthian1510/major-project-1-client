@@ -1,12 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Header from "../../components/Header";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
 
 const UserProfile = () => {
 
-  const { currentUserInfo } = useSelector((state) => state.users)
-    console.log({currentUserInfo})
+  const storedUser = localStorage.getItem('adminUser');
+  const currentUser = storedUser ? JSON.parse(storedUser) : null;
 
   return (
     <div>
@@ -15,7 +14,7 @@ const UserProfile = () => {
         <div className="row">
           <div className="text-center my-4 col">
             <img
-              src={currentUserInfo.userImage}
+              src={currentUser.userImage}
               alt="profilePic"
               className="img-fluid rounded"
               style={{ width: "15rem", height: "18rem", objectFit: "cover" }}
@@ -24,15 +23,15 @@ const UserProfile = () => {
               className="my-3"
               style={{ fontFamily: "DM Serif Display, serif" }}
             >
-              {currentUserInfo.name}
+              {currentUser.name}
             </h1>
             <p>
-              {currentUserInfo.email} <br />
-              {currentUserInfo.phoneNo} <br />
-              {currentUserInfo.address}
+              {currentUser.email} <br />
+              {currentUser.phoneNo} <br />
+              {currentUser.address}
             </p>
             <div>
-              <Link className="btn btn-success" to='/user/addAddress'>Add Address</Link>
+              <Link className="btn btn-success" to='/'>Edit Profile</Link>
             </div>
           </div>
           

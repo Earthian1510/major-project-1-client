@@ -9,26 +9,25 @@ export const signupUser = createAsyncThunk('auth/signupUser', async(formData) =>
 
 export const loginUser = createAsyncThunk('auth/loginUser', async (loginData) => {
     try {
-      console.log('Login Data Sent:', loginData); // Check the login data
       const response = await axios.post(`${API.baseUrl}/auth/login`, loginData);
-  
       const data = response.data;
       
       if (response.status === 200 && data.token) {
+        localStorage.setItem('adminToken', data.token);
+        localStorage.setItem('adminUser', JSON.stringify(data.user));
         return { token: data.token, user: data.user };
       }
   
     } catch (error) {
       // Log the full error response for better debugging
       console.error('Error response: ', error.response?.data || error.message);
-      
     }
   });
   
 const authSlice = createSlice({
     name: 'auth',
     initialState: {
-        user: null,
+        user: JSON.parse(localStorage.getItem('adminUser')) || null,
         token: localStorage.getItem('adminToken') || null,
         loading: false,
         error: null
@@ -37,6 +36,7 @@ const authSlice = createSlice({
         logoutUser: (state) => {
             state.token = null;
             state.user = null;
+            localStorage.removeItem('adminUser')
             localStorage.removeItem('adminToken');
         }
     },
@@ -59,9 +59,8 @@ const authSlice = createSlice({
         });
         builder.addCase(loginUser.fulfilled, (state, action) => {
             state.loading = false;
-            state.token = action.payload.token; // Store token in state
-            state.user = action.payload.user; // Store user info
-            localStorage.setItem('adminToken', action.payload.token); // Store token in localStorage
+            state.token = action.payload.token; 
+            state.user = action.payload.user; 
         });
         builder.addCase(loginUser.rejected, (state, action) => {
             state.loading = false;

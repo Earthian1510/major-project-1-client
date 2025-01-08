@@ -25,12 +25,13 @@ const LoginPage = () => {
     e.preventDefault();
 
     dispatch(loginUser(loginData))
+    .unwrap()
     .then(() => {
-      navigate('/')
+      navigate('/'); 
     })
-    .catch((error) => {
-      console.error('Login failed:', error)
-    })
+    .catch((err) => {
+      console.error('Login failed:', err); 
+    });
 
   };
 
@@ -62,8 +63,14 @@ const LoginPage = () => {
             required
           />
         </div>
+        { 
+          loading && <p> Loading...</p>
+        }
+        {
+          error && <p>{error}</p>
+        }
         <div style={{display: 'flex', alignItems: 'center', flexDirection: 'column'}}>
-          <button type="submit" className="btn btn-primary mt-3 mb-3">Login</button>
+          <button type="submit" className="btn btn-primary mt-3 mb-3" disabled={loading}>Login</button>
           <Link to='/signup'>Signup</Link>
         </div>
       </form>

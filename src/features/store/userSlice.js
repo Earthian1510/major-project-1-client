@@ -7,22 +7,20 @@ export const fetchUsers = createAsyncThunk('users/fetchUsers', async () => {
   return response.data;
 });
 
+export const fetchUserById = createAsyncThunk('users/fetchUserById', async (userId) => {
+  const response = await axios.get(`${API.baseUrl}/users/${userId}`);
+  return response.data;
+});
+
+
 const userSlice = createSlice({
   name: 'users',
   initialState: {
     users: [],
     loading: false, 
     error: null,
-    currentUserInfo: null,
   },
-  reducers: {
-    setUserInfo: (state, action) => {
-      state.currentUserInfo = action.payload; 
-    },
-    clearUserInfo: (state) => {
-      state.currentUserInfo = null;
-    }
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder.addCase(fetchUsers.pending, (state) => {
         state.loading = true;
@@ -37,8 +35,13 @@ const userSlice = createSlice({
         state.loading = false;
         state.error = action.error.message;
     })
+
+    builder.addCase(fetchUserById.fulfilled, (state, action) => {
+      state.loading = false;
+      state.users = action.payload;
+  })
   },
 });
-export const { setUserInfo, clearUserInfo } = userSlice.actions;
+
 export default userSlice.reducer;
 
