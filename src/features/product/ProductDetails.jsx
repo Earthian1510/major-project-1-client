@@ -9,6 +9,9 @@ const ProductDetails = () => {
   const dispatch = useDispatch()
   const { products } = useSelector((state) => state.product)
 
+  const storedUser = localStorage.getItem('adminUser');
+  const currentUser = storedUser ? JSON.parse(storedUser) : null;
+
   useEffect(() => {
     dispatch(fetchProducts())
   }, [dispatch])
@@ -20,7 +23,17 @@ const ProductDetails = () => {
     return prod._id !== productInfo._id && prod.category === productInfo.category;
   })
 
-  console.log(productArr)
+  const handleAddToCart = () => {
+
+  }
+
+  const handleBuyNow = () => {
+
+  }
+
+  const handleAddToWishlist = () => {
+
+  }
 
   return (
     <div>
@@ -41,8 +54,8 @@ const ProductDetails = () => {
               {productInfo.description}
             </p>
             <div className='my-3'>
-              <button className='btn btn-success mx-2' onClick=''>Add to Cart</button>
-              <button className='btn btn-warning' onClick=''>Buy Now</button>
+              <button className='btn btn-success mx-2' onClick={handleAddToCart}>Add to Cart</button>
+              <button className='btn btn-warning' onClick={handleBuyNow}>Buy Now</button>
             </div>
           </div>
         </div>
@@ -69,8 +82,8 @@ const ProductDetails = () => {
 
                   <div className='text-center' style={{maxWidth: '308px'}}>
                     <div>
-                    <button className='btn btn-success'>Cart</button>
-                    <button className='btn btn-dark mx-1'>Wishlist</button>
+                    <button className='btn btn-success' onClick={handleAddToCart}>Cart</button>
+                    <button className='btn btn-dark mx-1' onClick={handleAddToWishlist}>Wishlist</button>
                     </div>
                   </div>
                 </div>

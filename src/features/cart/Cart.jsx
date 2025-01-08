@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import Header from '../../components/Header';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { fetchCart, updateProductQuantity, removeCartItem } from '../store/cartSlice'; // import actions
 
 const Cart = () => {
@@ -9,49 +9,57 @@ const Cart = () => {
   const navigate = useNavigate();
   
   const cartProducts = useSelector((state) => state.cart.cart?.items || []);
-  const loggedInUser = useSelector((state) => state.users.currentUserInfo);
-  
-  if(!loggedInUser){
-    return <div>Loading ...</div>
-  }
-  
-  const userId = loggedInUser._id;
+
+  const storedUser = localStorage.getItem('adminUser');
+  const currentUser = storedUser ? JSON.parse(storedUser) : null;
 
   const totalProductPrice = cartProducts.reduce((acc, item) => acc + (item.productId.price * item.quantity), 0);
   const deliveryCharge = 50; 
 
   useEffect(() => {
-    if (userId) {
-      dispatch(fetchCart(userId)); 
+    if (currentUser) {
+      dispatch(fetchCart(currentUser.id)); 
     }
-  }, [dispatch, userId]); 
+  }, [dispatch, currentUser.id]); 
 
   const handleIncreaseQuantity = (item) => {
     dispatch(updateProductQuantity({
-      userId,
+      userId: currentUser.id,
       productId: item.productId._id,
       action: 'increase',
-    }));
+    }))
+    .then(() => {
+      dispatch(fetchCart(currentUser.id));
+    });
    
   };
 
   const handleDecreaseQuantity = (item) => {
     if (item.quantity > 1) {
       dispatch(updateProductQuantity({
-        userId,
+        userId: currentUser.id,
         productId: item.productId._id,
         action: 'decrease',
-      }));
+      }))
+      .then(() => {
+        dispatch(fetchCart(currentUser.id));
+      });
       
     }
     else{
-      dispatch(removeCartItem({userId, productId: item.productId._id}))
+      dispatch(removeCartItem({userId: currentUser.id, productId: item.productId._id}))
+      .then(() => {
+        dispatch(fetchCart(currentUser.id));
+      })
       
     }
   };
 
   const handleRemoveFromCart = (productId) => {
-    dispatch(removeCartItem({ userId, productId}))
+    dispatch(removeCartItem({ userId: currentUser.id, productId}))
+    // .then(() => {
+    //   dispatch(fetchCart(currentUser.id));
+    // })
     
 
   }

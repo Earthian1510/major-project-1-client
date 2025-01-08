@@ -13,7 +13,7 @@ export const fetchCart = createAsyncThunk(
 export const createCart = createAsyncThunk(
   'cart/createCart',
   async ({ userId, items }) => {
-    const response = await axios.post(`${API.cart}/cart`, { userId, items});
+    const response = await axios.post(`${API.cart}`, { userId, items: []});
     return response.data;
   }
 )
