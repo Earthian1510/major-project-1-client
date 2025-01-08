@@ -1,58 +1,35 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { logoutUser } from '../features/store/authSlice';
-import { fetchUsers } from "../features/store/userSlice";
 import { setSearchQuery } from "../features/store/filterSlice"; 
-import { setUserInfo, clearUserInfo } from "../features/store/userSlice";
 
 const Header = () => {
   const [search, setSearch] = useState('');
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  // Get users and filters from the Redux store
-  const { users } = useSelector((state) => state.users);
-  const  currentUserInfo = useSelector((state) => state.users); // Get the search query from global state
-  
-  // Check if the user is logged in by checking the token in localStorage
   const token = localStorage.getItem('adminToken');
-  const user = token ? JSON.parse(atob(token.split('.')[1])) : null;
+  const storedUser = localStorage.getItem('adminUser');
+  const loggedInUser = storedUser ? JSON.parse(storedUser) : null;
 
-  // Find the logged-in user based on the userId from the token
-  const loggedInUser = users?.find((a) => a._id === user?.userId);
 
-  // Fetch users on component mount (this should populate the users array)
-  useEffect(() => {
-    dispatch(fetchUsers());
-  }, [dispatch]);
-
-  // Dispatch setUserInfo only after users have been fetched
-  useEffect(() => {
-    if (loggedInUser) {
-      dispatch(setUserInfo(loggedInUser)); // Dispatch the logged-in user to Redux state
-    }
-  }, [dispatch, loggedInUser]); // Only re-run this effect if loggedInUser changes
-
-  // Handle the search query input change
   const handleSearchChange = (e) => {
-    setSearch(e.target.value); // Local search value
+    setSearch(e.target.value); 
   };
 
-  // Handle search form submission
   const handleSearchSubmit = (e) => {
     e.preventDefault();
-    dispatch(setSearchQuery(search));  // Ensure search query is set globally
+    dispatch(setSearchQuery(search));  
     setSearch('');
-    navigate('/products'); // Redirect to products page after search
+    navigate('/products'); 
   };
 
-  // Handle logout
   const handleLogout = () => {
-    localStorage.removeItem('adminToken'); // Clear token from localStorage
-    dispatch(clearUserInfo());  // Clear user info from Redux
-    dispatch(logoutUser());  // Optionally dispatch logoutUser to clear any user data in Redux
-    navigate('/login');  // Redirect to login page
+    localStorage.removeItem('adminToken');
+    localStorage.removeItem('adminUser');
+    dispatch(logoutUser()); 
+    navigate('/login'); 
   };
 
   return (
@@ -79,7 +56,7 @@ const Header = () => {
                 placeholder="Search"
                 aria-label="Search"
                 value={search}
-                onChange={handleSearchChange}  // Use local search value
+                onChange={handleSearchChange} 
               />
               <button className="btn btn-outline-success" type="submit" onClick={handleSearchSubmit}>
                 Search
@@ -88,7 +65,7 @@ const Header = () => {
             <ul className="navbar-nav flex-grow-1 d-flex justify-content-end mb-2 mb-lg-0">
               <li className="nav-item mx-2">
                 <Link className="nav-link active fw-semibold" aria-current="page" to="/user">
-                  { user ? `${loggedInUser?.name}` : 'Login'}
+                  { loggedInUser ? loggedInUser.name : 'Login'}
                 </Link> 
               </li>
               <li className="nav-item mx-2">
@@ -101,7 +78,7 @@ const Header = () => {
                   Wishlist
                 </Link>
               </li>
-              {user && (
+              { loggedInUser && (
                 <li className="nav-item mx-2">
                   <button className="mt-1 btn btn-sm btn-outline-danger" onClick={handleLogout}>
                     Logout
