@@ -2,13 +2,13 @@ import React, { useEffect } from 'react';
 import Header from '../../components/Header';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, Link } from 'react-router-dom';
-import { fetchCart, updateProductQuantity, removeCartItem } from '../store/cartSlice'; // import actions
+import { fetchCart, addToCart, increaseItemQuantity, decreaseItemQuantity, removeFromCart, clearUserCart } from '../store/cartSlice'; // import actions
 
 const Cart = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   
-  const cartProducts = useSelector((state) => state.cart.cart?.items || []);
+  const cartProducts = useSelector((state) => state.cart.items);
 
   const storedUser = localStorage.getItem('adminUser');
   const currentUser = storedUser ? JSON.parse(storedUser) : null;
@@ -20,48 +20,24 @@ const Cart = () => {
     if (currentUser) {
       dispatch(fetchCart(currentUser.id)); 
     }
-  }, [dispatch, currentUser.id]); 
+  }, [dispatch, currentUser]); 
 
-  const handleIncreaseQuantity = (item) => {
-    dispatch(updateProductQuantity({
-      userId: currentUser.id,
-      productId: item.productId._id,
-      action: 'increase',
-    }))
-    .then(() => {
-      dispatch(fetchCart(currentUser.id));
-    });
-   
-  };
 
-  const handleDecreaseQuantity = (item) => {
-    if (item.quantity > 1) {
-      dispatch(updateProductQuantity({
-        userId: currentUser.id,
-        productId: item.productId._id,
-        action: 'decrease',
-      }))
-      .then(() => {
-        dispatch(fetchCart(currentUser.id));
-      });
-      
-    }
-    else{
-      dispatch(removeCartItem({userId: currentUser.id, productId: item.productId._id}))
-      .then(() => {
-        dispatch(fetchCart(currentUser.id));
-      })
-      
-    }
+  const handleIncreaseQuantity = (productId) => {
+    dispatch(increaseItemQuantity({ userId: currentUser.id, productId }));
   };
+  
+  const handleDecreaseQuantity = (productId) => {
+    dispatch(decreaseItemQuantity({ userId: currentUser.id, productId }));
+  };
+  
 
   const handleRemoveFromCart = (productId) => {
-    dispatch(removeCartItem({ userId: currentUser.id, productId}))
-    // .then(() => {
-    //   dispatch(fetchCart(currentUser.id));
-    // })
-    
+    dispatch(removeFromCart({ userId: currentUser.id, productId}))
+  }
 
+  const handleClearCart = () => {
+    dispatch(clearUserCart({ userId: currentUser.id}))
   }
 
   const handlePlaceOrder = () => {
@@ -74,10 +50,11 @@ const Cart = () => {
       <Header />
       <div className='container my-3'>
         <h2 className='fw-light mb-3'>My Cart ({cartProducts.length ? cartProducts.length : '0'})</h2>
+        <button onClick={() => handleClearCart()}>clear cart</button>
         <div className="row">
           <div className="col-md-6 mb-4">
             {cartProducts.length > 0 ? (
-              cartProducts.map((item) => (
+              cartProducts?.map((item) => (
                 <div key={item.productId._id} className="col mb-4">
                   <div className="card">
                     <div className="row">
@@ -96,9 +73,9 @@ const Cart = () => {
                         </h2>
                         <div>
                           Quantity:
-                          <button className='btn btn-sm btn-outline-secondary mx-1' onClick={() => handleDecreaseQuantity(item)}>-</button>
+                          <button className='btn btn-sm btn-outline-secondary mx-1' onClick={() => handleDecreaseQuantity(item.productId._id)}>-</button>
                           <span className='fw-bold' style={{ fontFamily: "DM Serif Display, serif" }}>{item.quantity || 1}</span>
-                          <button className='btn btn-sm btn-outline-secondary mx-1' onClick={() => handleIncreaseQuantity(item)} >+</button>
+                          <button className='btn btn-sm btn-outline-secondary mx-1' onClick={() => handleIncreaseQuantity(item.productId._id)} >+</button>
                         </div>
                         <div className='d-flex mt-3'>
                           <button 

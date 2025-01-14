@@ -3,12 +3,11 @@ import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchProducts } from '../store/productSlice';
 import { fetchCategories } from '../store/categorySlice';
-import { addProductToCart, updateProductQuantity } from '../store/cartSlice';
+import {  addToCart } from '../store/cartSlice';
 
 const ProductsList = () => {
   const dispatch = useDispatch();
 
-  const { cart } = useSelector((state) => state.cart);
   const { products } = useSelector((state) => state.product);
   const { selectedCategories, sortBy, searchQuery } = useSelector((state) => state.filters);
 
@@ -49,20 +48,7 @@ const ProductsList = () => {
       return;
     }
 
-    const existingItem = cart?.items?.find((item) => item.productId === productId);
-    if (existingItem) {
-      dispatch(updateProductQuantity({
-        userId: currentUser.id,
-        productId,
-        action: 'increase',
-      }));
-    } else {
-      dispatch(addProductToCart({
-        userId: currentUser.id,
-        productId,
-        quantity: 1,
-      }));
-    }
+    dispatch(addToCart({ userId: currentUser.id, product: { productId, quantity: 1}}))
   };
 
   return (

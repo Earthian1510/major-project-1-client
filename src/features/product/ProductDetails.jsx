@@ -3,6 +3,7 @@ import Header from '../../components/Header'
 import { useLocation, Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchProducts } from '../store/productSlice'
+import { addToCart } from '../store/cartSlice'
 
 const ProductDetails = () => {
 
@@ -23,9 +24,13 @@ const ProductDetails = () => {
     return prod._id !== productInfo._id && prod.category === productInfo.category;
   })
 
-  const handleAddToCart = () => {
-
-  }
+  const handleAddToCart = (productId) => {
+      if (!currentUser?.id) {
+        console.log("User is not logged in.");
+        return;
+      }
+      dispatch(addToCart({ userId: currentUser.id, product: { productId, quantity: 1}}))
+    };
 
   const handleBuyNow = () => {
 
@@ -54,7 +59,7 @@ const ProductDetails = () => {
               {productInfo.description}
             </p>
             <div className='my-3'>
-              <button className='btn btn-success mx-2' onClick={handleAddToCart}>Add to Cart</button>
+              <button className='btn btn-success mx-2' onClick={() => handleAddToCart(productInfo._id)}>Add to Cart</button>
               <button className='btn btn-warning' onClick={handleBuyNow}>Buy Now</button>
             </div>
           </div>
