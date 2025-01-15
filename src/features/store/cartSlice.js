@@ -50,6 +50,7 @@ export const decreaseItemQuantity = createAsyncThunk(
   async ({ userId, productId }) => {
     try {
       const response = await axios.patch(`${API.cart}/${userId}/items/${productId}/decrease`);
+      console.log(response.data.items)
       return response.data.items; 
     } catch (error) {
       console.error(error);
@@ -119,29 +120,24 @@ const cartSlice = createSlice({
 
     builder.addCase(increaseItemQuantity.fulfilled, (state, action) => {
       state.status = 'idle';
-      const itemIndex = state.items.findIndex((item) => item.productId === action.payload.productId);
-    
-      if (itemIndex !== -1) {
-        const updatedItem = { ...state.items[itemIndex] };
-        updatedItem.quantity += 1;
-        state.items[itemIndex] = updatedItem;
-      }
+      action.payload.forEach((updatedItem) => {
+        const existingItem = state.items.find((item) => item.productId === updatedItem.productId);
+        if (existingItem) existingItem.quantity = updatedItem.quantity;
+      });
     });
     
     
     builder.addCase(decreaseItemQuantity.fulfilled, (state, action) => {
       state.status = 'idle';
-      const itemIndex = state.items.findIndex((item) => item.productId === action.payload.productId);
-    
-      if (itemIndex !== -1) {
-        const updatedItem = { ...state.items[itemIndex] }; 
-        if (updatedItem.quantity > 1) {
-          updatedItem.quantity -= 1;
-          state.items[itemIndex] = updatedItem;  
-        } else {
-          state.items = state.items.filter((item) => item.productId !== action.payload.productId);
+      action.payload.forEach((updatedItem) => {
+        const existingItem = state.items.find((item) => item.productId === updatedItem.productId);
+        if (existingItem) {
+          existingItem.quantity = updatedItem.quantity;
+          if (updatedItem.quantity === 0) {
+            state.items = state.items.filter((item) => item.productId !== updatedItem.productId);
+          }
         }
-      }
+      });
     });
     
     builder.addCase(removeFromCart.fulfilled, (state, action) => {
